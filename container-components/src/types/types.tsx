@@ -13,3 +13,8 @@ export type Product = {
     description: string;
     rating: number;
 }
+
+export type ResourceMap = {
+  user: Person;
+  product: Product;
+}
