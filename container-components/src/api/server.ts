@@ -1,0 +1,90 @@
+import express from 'express';
+import cors from 'cors';
+import { Person, Product } from '../types/types'
+
+const app = express();
+
+app.use(cors())
+app.use(express.json());
+
+let currentUser: Person = {
+    id: '1', // Added missing id property
+    name: 'John Doe',
+    age: 54,
+    hairColor: 'brown',
+    hobbies: ['swimming', 'bicycling', 'video games'],
+};
+
+let users: Person[] = [{
+    id: '1', // Added missing id property
+    name: 'John Doe',
+    age: 54,
+    hairColor: 'brown',
+    hobbies: ['swimming', 'bicycling', 'video games'],
+}, {
+    id: '2', // Added missing id property
+    name: 'Brenda Smith',
+    age: 33,
+    hairColor: 'black',
+    hobbies: ['golf', 'mathematics'],
+}, {
+    id: '3', // Added missing id property
+    name: 'Jane Garcia',
+    age: 27,
+    hairColor: 'blonde',
+    hobbies: ['biology', 'medicine', 'gymnastics'],
+}];
+
+const products: Product[] = [{
+    id: '1', // Added missing id property
+    name: 'Flat-Screen TV',
+    price: '$300',
+    description: 'Huge LCD screen, a great deal',
+    rating: 4.5,
+}, {
+    id: '2', // Added missing id property
+    name: 'Basketball',
+    price: '$10',
+    description: 'Just like the pros use',
+    rating: 3.8,
+}, {
+    id: '3', // Added missing id property
+    name: 'Running Shoes',
+    price: '$120',
+    description: 'State-of-the-art technology for optimum running',
+    rating: 4.2,
+}];
+
+app.get('/current-user', (req: express.Request, res: express.Response) => {
+    res.json(currentUser);
+});
+
+app.get('/users/:id', (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    res.json(users.find(user => user.id === id));
+});
+
+app.post('/users/:id', (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    const { user: updatedUser } = req.body;
+
+    users = users.map(user => user.id === id ? updatedUser : user);
+    res.json(users.find(user => user.id === id));
+});
+
+app.get('/users', (req: express.Request, res: express.Response) => {
+    res.json(users);
+});
+
+app.get('/products/:id', (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    res.json(products.find(product => product.id === id));
+});
+
+app.get('/products', (req: express.Request, res: express.Response) => {
+    res.json(products);
+});
+
+app.listen(8080, () => {
+    console.log('Server is listening on port 8080');
+});
